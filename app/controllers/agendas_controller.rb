@@ -21,6 +21,15 @@ class AgendasController < ApplicationController
     end
   end
 
+  def destroy
+    @agenda = Agenda.find(params[:id])
+    @agenda.destroy
+    @agenda.team.members.each do |member|
+      AssignMailer.remove_agenda_mail(member.email, @agenda.title).deliver
+    end
+    redirect_to dashboard_url, notice: 'アジェンダ削除に成功しました！'
+  end
+
   private
 
   def set_agenda
@@ -30,4 +39,15 @@ class AgendasController < ApplicationController
   def agenda_params
     params.fetch(:agenda, {}).permit %i[title description]
   end
+
+  #def agenda_destroy(agenda, agenda_user)
+    #if agenda_user == agenda.user_id
+      #agenda.destroy
+      #'アジェンダを削除しました！'
+    #elsif
+      #'このユーザーは権限を所有していないため、削除できません。'
+    #else
+      #'なんらかの原因で、削除できませんでした。'
+    #end
+  #end
 end

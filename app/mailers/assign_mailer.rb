@@ -10,6 +10,13 @@ class AssignMailer < ApplicationMailer
   def transfer_mail(email, team)
     @email = email
     @team = team
-    mail to: @email, subject: "#{@team}チームのリーダー権限があなたに移動しました！"
+    mail to: @email, subject: "あなたは、#{@team} チームのリーダーにアサインされました！"
   end
+
+  def remove_agenda_mail(email, agenda)
+    @email = email
+    @agenda = agenda
+    mail to: @email, subject: "アジェンダ #{@agenda} が削除されました"
+  end
+
 end
